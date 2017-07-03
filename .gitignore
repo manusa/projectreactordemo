@@ -24,6 +24,7 @@ hs_err_pid*
 # Gradle
 .gradle
 /build/
+/bin/
 !gradle/wrapper/gradle-wrapper.jar
 gradle-bootRun
 gradle-hotreload
@@ -43,13 +44,17 @@ gradlew.bat
 *.iws
 *.iml
 *.ipr
-.vscode/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 
 ### NetBeans ###
 nbproject/private/
-build/
-bin/
 nbbuild/
 dist/
 nbdist/
