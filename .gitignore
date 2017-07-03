@@ -44,9 +44,11 @@ gradlew.bat
 *.iml
 *.ipr
 
+
 ### NetBeans ###
 nbproject/private/
 build/
+bin/
 nbbuild/
 dist/
 nbdist/
