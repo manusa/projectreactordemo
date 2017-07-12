@@ -1,27 +1,26 @@
 package com.marcnuri.projectreactordemo.rest;
 
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.beans.ConstructorProperties;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path="/test")
 public class TestController {
+
+    private static final Logger LOGGER = Logger.getLogger(TestController.class.getName());
 
   private static List<String> words = Arrays.asList(
         "the",
@@ -35,7 +34,7 @@ public class TestController {
         "dog"
         );
 
-    @RequestMapping(value = "/flux", method = RequestMethod.GET)
+    @RequestMapping(value = "/flux", method = RequestMethod.GET, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux getFlux(){
         return Flux.fromIterable(words);
         // return Flux.interval(Duration.ofSeconds(5))
@@ -51,11 +50,40 @@ public class TestController {
                  .map(w -> "Hello " + w + "!");
    }
 
+    @GetMapping("helloDelay/{who}")
+    public Mono<String> helloDelay(@PathVariable String who) {
+        return Mono.just("Hello " + who + "!!")
+                .delaySubscription(Duration.ofSeconds(5));
+    }
+
+    @GetMapping("heyMister")
+    public Flux<String> hey(@RequestParam("mr") String mr) {
+        return Mono.just("Hey mister ")
+                .concatWith(Mono.just(mr)
+                ).concatWith(Mono.just(". how are you?"));
+    }
+
     @CrossOrigin
     @GetMapping("/events/{id}")
     public Mono<Event> eventById(@PathVariable long id) {
         return Mono.just(new Event(id, LocalDate.now()));
     }
+
+    @CrossOrigin
+    @GetMapping(value = "events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Event> events() {
+        //https://github.com/bclozel/spring-reactive-university/blob/master/pom.xml
+        LOGGER.info("Getting events");
+        Flux<Event> eventFlux = Flux.fromStream(
+                Stream.generate(
+                        ()->new Event(System.currentTimeMillis(), LocalDate.now()))
+        );
+
+        Flux<Long> durationFlux = Flux.interval(Duration.ofSeconds(1));
+
+        return Flux.zip(eventFlux, durationFlux).map(Tuple2::getT1);
+    }
+
     public static final class Address {
 
         public String getCity() {

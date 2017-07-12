@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan({
 	"com.marcnuri.projectreactordemo",
-	"com.marcnuri.projectreactordemo.rest"})
+	"com.marcnuri.projectreactordemo.rest1"})
 public class ProjectreactordemoApplication {
 
 	public static void main(String[] args) {
