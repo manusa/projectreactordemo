@@ -69,7 +69,7 @@ private static final Logger LOGGER = Logger.getLogger(CoindeskPrice.class.getNam
 //**************************************************************************************************
 //  Getter/Setter Methods
 //**************************************************************************************************
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
 	public Date getUpdatedISO() {
 		return updatedISO;
 	}
