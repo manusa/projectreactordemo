@@ -1,4 +1,5 @@
 /// <reference path="../deps/EventSource.d.ts"/>
+import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
@@ -11,6 +12,7 @@ import { TestService } from './test.service';
     AppComponent
   ],
   imports: [
+    AngularFontAwesomeModule,
     BrowserModule,
     HttpModule
   ],
